@@ -1,19 +1,43 @@
 # API-Rest-Blog
 
-The Blog API is a simple application that allows you to create, edit and delete articles, as well as to get a list of all articles or one in particular. It also allows you to upload images to associate them with the articles.
+The following documentation describes a simple REST API created for a blog. The API has the following routes and functionalities:
 
-The API has the following endpoints:
+# Create an article:
 
-POST /articles: Creates a new article. It receives the parameters of the article to be created in the body of the request. If the data is invalid, it returns a 400 error. If it is created correctly, it returns the created article and a success message.
+Method: POST
+Route: /api/create-article
+Request parameters: Expect a JSON object in the request body containing the properties "title" (string) and "content" (string).
+Successful response: Status code 200 and a JSON object with the properties "status" ("success"), "article" (created article), and "message" ("article successfully created").
+Error response: Status code 400 if no data is provided or the data fails validation, and a JSON object with the properties "status" ("error") and "message" ("no data to send").
 
-GET /articles: Gets all articles. If the last parameter is given, returns the three most recent articles. If there are no articles, returns a 404 error. Otherwise, it returns the articles and a success message.
+# Get articles:
 
-GET /articles/:id: Gets an article by its id. If the article does not exist, returns a 404 error. Otherwise, returns the article and a success message.
+Method: GET
+Route: /api/get-articles/:last?
+Request parameters: An optional "last" parameter in the URL to retrieve only the latest articles. If provided, only the last 3 articles will be returned.
+Successful response: Status code 200 and a JSON object with the properties "status" ("success") and "articles" (array of found articles).
+Error response: Status code 404 if no articles are found, and a JSON object with the properties "status" ("error") and "message" ("no articles found").
 
-DELETE /articles/:id: Deletes an article by its id. If the article does not exist, returns a 500 error. Otherwise, returns the deleted article and a success message.
+# Get a specific article:
 
-PUT /articles/:id: Edit an article by its id. It receives the parameters of the article to edit in the body of the request. If the data is invalid, it returns a 400 error. If the article does not exist, it returns a 404 error. Otherwise, it returns the updated article and a success message.
+Method: GET
+Route: /api/get-article/:id
+Request parameters: Expect a "id" parameter in the URL corresponding to the unique identifier of the article.
+Successful response: Status code 200 and a JSON object with the properties "status" ("success") and "article" (found article).
+Error response: Status code 404 if the article is not found, and a JSON object with the properties "status" ("error") and "message" ("no articles found").
 
-POST /articles/image: Upload an image associated with an article. The image must be sent in the body of the request with the name image. If no image is provided, it returns a 404 error. If the file extension is invalid (only .png, .jpg and .jpeg files are supported), it returns a 400 error. If all goes well, it updates the article and returns a success message.
+# Delete an article:
 
-A Validate.js helper file is used to validate the data. To save and retrieve articles from the database, the Article.js model is used. In addition, the multer module is used to upload images.
+Method: DELETE
+Route: /api/get-article/:id
+Request parameters: Expect a "id" parameter in the URL corresponding to the unique identifier of the article to be deleted.
+Successful response: Status code 200 and a JSON object with the properties "status" ("success"), "article" (deleted article), and "message" ("method delete").
+Error response: Status code 500 if an error occurs while deleting the article, and a JSON object with the properties "status" ("error") and "message" ("error deleting article").
+
+# Edit an article:
+
+Method: PUT
+Route: /api/get-article/:id
+Request parameters: Expect a "id" parameter in the URL corresponding to the unique identifier of the article to be edited. Additionally, expect a JSON object in the request body containing the properties to be updated ("title" and/or "content").
+Successful response: Status code 200 and a JSON object with the properties "status" ("success") and "article" (updated article).
+Error response: Status code 404 if the article is not found, and a JSON object with the properties "status" ("error") and "message" ("Article not found").ed. In addition, the multer module is used to upload images.
